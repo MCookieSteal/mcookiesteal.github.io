@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificados de Ciberseguridad eCPPTv3, OSCP - Guía Completa | MCookieSteal</title>
+  
+  <!-- Meta Description -->
+  <meta name="description" content="Guía completa de certificaciones de ciberseguridad: eCPPTv3, OSCP, pentesting y hacking ético. Experiencia personal, consejos para exámenes, recursos de estudio y preparación. Especialista en Active Directory, vulnerabilidades web y pentesting práctico.">
+  
+  <!-- Meta Keywords -->
+  <meta name="keywords" content="certificados ciberseguridad, eCPPTv3, OSCP, certificación pentesting, INE, eLearnSecurity, hacking ético, seguridad informática, Active Directory, pentesting, vulnerabilidades web, examen práctico, certificación seguridad, HackTheBox, TryHackMe, preparación examen ciberseguridad">
+  
+  <!-- Author -->
+  <meta name="author" content="MCookieSteal">
+  
+  <!-- Robots -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mcookiesteal.github.io/CertificateOpinion/">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Certificados de Ciberseguridad eCPPTv3, OSCP - Guía Completa">
+  <meta property="og:description" content="Guía completa de certificaciones de ciberseguridad: eCPPTv3, OSCP, pentesting y hacking ético. Experiencia personal, consejos para exámenes y recursos de estudio.">
+  <meta property="og:url" content="https://mcookiesteal.github.io/CertificateOpinion/">
+  <meta property="og:site_name" content="MCookieSteal - Certificados Ciberseguridad">
+  <meta property="og:locale" content="es_ES">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Certificados de Ciberseguridad eCPPTv3, OSCP - Guía Completa">
+  <meta name="twitter:description" content="Guía completa de certificaciones de ciberseguridad: eCPPTv3, OSCP, pentesting y hacking ético. Experiencia personal, consejos para exámenes y recursos de estudio.">
+  <meta name="twitter:creator" content="@MCookieSteal">
+  
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#2954a6">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181818">
+  
+  <!-- Language -->
+  <meta http-equiv="content-language" content="es">
+  
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MCookieSteal - Certificados de Ciberseguridad",
+    "description": "Guía completa de certificaciones de ciberseguridad: eCPPTv3, OSCP, pentesting y hacking ético. Experiencia personal, consejos para exámenes y recursos de estudio.",
+    "url": "https://mcookiesteal.github.io/CertificateOpinion/",
+    "author": {
+      "@type": "Person",
+      "name": "MCookieSteal",
+      "jobTitle": "Especialista en Ciberseguridad",
+      "knowsAbout": ["Pentesting", "Hacking Ético", "Ciberseguridad", "Active Directory", "Seguridad Informática"]
+    },
+    "inLanguage": "es",
+    "keywords": "certificados ciberseguridad, eCPPTv3, OSCP, certificación pentesting, INE, eLearnSecurity, hacking ético, seguridad informática, Active Directory, pentesting",
+    "about": {
+      "@type": "Thing",
+      "name": "Certificaciones de Ciberseguridad",
+      "description": "Información detallada sobre certificaciones de pentesting y ciberseguridad"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "MCookieSteal",
+    "jobTitle": "Especialista en Ciberseguridad",
+    "description": "Especialista en pentesting, hacking ético y seguridad informática con certificaciones profesionales en ciberseguridad",
+    "knowsAbout": [
+      {
+        "@type": "Thing",
+        "name": "Pentesting"
+      },
+      {
+        "@type": "Thing",
+        "name": "Hacking Ético"
+      },
+      {
+        "@type": "Thing",
+        "name": "Ciberseguridad"
+      },
+      {
+        "@type": "Thing",
+        "name": "Active Directory"
+      },
+      {
+        "@type": "Thing",
+        "name": "Seguridad Informática"
+      },
+      {
+        "@type": "Thing",
+        "name": "Vulnerabilidades Web"
+      }
+    ],
+    "hasCredential": [
+      {
+        "@type": "EducationalOccupationalCredential",
+        "name": "eCPPTv3",
+        "description": "eLearnSecurity Certified Professional Penetration Tester v3",
+        "credentialCategory": "Certificación Profesional",
+        "educationalLevel": "Intermedio-Avanzado",
+        "about": {
+          "@type": "Thing",
+          "name": "Pentesting y Ciberseguridad"
+        }
+      }
+    ]
+  }
+  </script>
+  
+  <style>
+    body {
+      max-width: 60%;
+      margin: auto;
+      text-align: justify;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 1.07em;
+      background: #fff;
+      color: #222;
+      line-height: 1.7;
+      padding-bottom: 20px;
+    }
+    h1, h2, h3, h4 {
+      color: #2954a6;
+      margin-top: 1em;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.2em;
+      margin-bottom: 0.3em;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 1.1em;
+      margin-bottom: 2em;
+    }
+    ul, ol {
+      margin-left: 2em;
+    }
+    code, pre {
+      background: #f2f2f2;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.97em;
+    }
+    a { 
+      color: #2954a6; 
+      text-decoration: underline; 
+    }
+    a:hover {
+      color: #1a3670;
+    }
+    hr { 
+      border: none; 
+      border-top: 1px solid #aaa; 
+      margin: 1em 0; 
+    }
+    .section {
+      margin-bottom: 2em;
+    }
+    .certificates-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .certificates-list li {
+      padding: 0.5em 0;
+      border-bottom: 1px solid #eee;
+    }
+    .certificates-list li:last-child {
+      border-bottom: none;
+    }
+    .nav-links {
+      background: #f4f4f4;
+      padding: 1.5em;
+      border-radius: 8px;
+      margin: 2em 0;
+    }
+    .nav-links h3 {
+      margin-top: 0;
+      text-align: center;
+    }
+    .nav-links ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .nav-links li {
+      padding: 0.7em 0;
+    }
+    .nav-links a {
+      font-size: 1.1em;
+      font-weight: 500;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #181818 !important;
+        color: #e0e0e0 !important;
+      }
+      .subtitle {
+        color: #aaa !important;
+      }
+      a { color: #9ecbff !important; }
+      a:hover { color: #7eb4ff !important; }
+      h1, h2, h3, h4 { color: #9ecbff !important; }
+      code, pre { background: #222 !important; color: #e0e0e0 !important; }
+      .nav-links {
+        background: #222 !important;
+      }
+      .certificates-list li {
+        border-bottom: 1px solid #333 !important;
+      }
+    }
+    @media (max-width: 900px) {
+      body { max-width: 98%; font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Certificados de Ciberseguridad: eCPPTv3, OSCP y Pentesting</h1>
+  <p class="subtitle">Guía Completa de Certificaciones | Pentesting | Hacking Ético | Active Directory</p>
+
+  <div class="section">
+    <h2>Certificaciones de Ciberseguridad Profesionales</h2>
+    <hr>
+    <p>
+      ¡Hola! Soy MCookieSteal, un apasionado de la ciberseguridad y el pentesting. Me dedico al mundo del hacking ético, 
+      buscando vulnerabilidades y ayudando a organizaciones a mejorar su postura de seguridad.
+    </p>
+    <p>
+      Mi enfoque está en el aprendizaje continuo y la práctica constante, siempre explorando nuevas técnicas y herramientas 
+      en el campo de la seguridad informática. Creo firmemente en compartir conocimiento con la comunidad, por eso comparto 
+      mis experiencias y opiniones sobre certificaciones y recursos de aprendizaje.
+    </p>
+    <p>
+      En esta web encontrarás mis experiencias con <strong>certificaciones de ciberseguridad</strong> como <strong>eCPPTv3</strong> y <strong>OSCP</strong>, artículos técnicos sobre <strong>pentesting</strong>, <strong>Active Directory</strong>, y recursos 
+      que espero te sean útiles en tu camino en el mundo de la <strong>seguridad informática</strong>.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>Especialización en Pentesting y Seguridad Ofensiva</h2>
+    <hr>
+    <ul>
+      <li>
+        <strong>Pentesting y Seguridad Ofensiva</strong><br>
+        Experiencia práctica en la realización de <strong>pruebas de penetración</strong> en entornos Windows y Linux, 
+        incluyendo explotación de <strong>vulnerabilidades web</strong> (OWASP Top 10), <strong>escalada de privilegios</strong>, 
+        y ataques a entornos de <strong>Active Directory</strong>.
+      </li>
+      <br>
+      <li>
+        <strong>Análisis de Vulnerabilidades</strong><br>
+        Identificación y explotación de vulnerabilidades en aplicaciones web, sistemas operativos y redes. 
+        Experiencia con herramientas como Nmap, Burp Suite, Metasploit, y herramientas de enumeración de AD.
+      </li>
+      <br>
+      <li>
+        <strong>Laboratorios y CTFs</strong><br>
+        Participación activa en plataformas de práctica como <strong>HackTheBox</strong> y <strong>TryHackMe</strong>, resolviendo máquinas 
+        de diferentes niveles de dificultad y participando en desafíos de captura de bandera (CTF).
+      </li>
+      <br>
+      <li>
+        <strong>Formación Continua en Ciberseguridad</strong><br>
+        Estudiante de Ingeniería Informática con dedicación especial al campo de la ciberseguridad. 
+        Aprendizaje constante a través de <strong>certificaciones profesionales</strong>, cursos especializados y práctica en laboratorios.
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Certificados de Ciberseguridad Obtenidos</h2>
+    <hr>
+    <ul class="certificates-list">
+      <li>
+        <strong>eCPPTv3 (eLearnSecurity Certified Professional Penetration Tester v3)</strong><br>
+        <em>INE (eLearnSecurity)</em><br>
+        <strong>Certificación práctica en pentesting</strong> que cubre explotación de sistemas Windows/Linux, 
+        <strong>vulnerabilidades web</strong>, y ataques a <strong>Active Directory</strong>. <strong>Examen 100% práctico de 24 horas</strong>. 
+        Ideal para profesionales que buscan validar sus conocimientos en <strong>hacking ético</strong> y <strong>seguridad ofensiva</strong>.
+      </li>
+    </ul>
+    <p style="margin-top: 1em; font-style: italic; color: #666;">
+      Esta sección se irá actualizando con nuevas <strong>certificaciones de ciberseguridad</strong> y logros en el campo de la <strong>seguridad informática</strong>.
+    </p>
+  </div>
+
+  <div class="nav-links">
+    <h3>📚 Guías Completas sobre Certificaciones de Ciberseguridad</h3>
+    <ul>
+      <li>
+        <a href="certificates/ecpptv3.html">→ Guía Completa eCPPTv3: Experiencia, Preparación y Consejos para el Examen</a><br>
+        <span style="font-size: 0.9em; color: #666;">
+          Guía detallada sobre la <strong>certificación eCPPTv3 de INE</strong>: mi experiencia personal, consejos para aprobar el examen, 
+          recursos de estudio para <strong>pentesting</strong> y <strong>Active Directory</strong>, y comparativa con <strong>OSCP</strong>. 
+          Incluye recomendaciones de plataformas como <strong>HackTheBox</strong> y <strong>TryHackMe</strong>.
+        </span>
+      </li>
+    </ul>
+    <p style="text-align: center; margin-top: 1.5em; font-size: 0.95em; color: #666;">
+      Próximamente más artículos sobre <strong>certificaciones de ciberseguridad</strong>, <strong>OSCP</strong>, <strong>CEH</strong> y recursos de <strong>pentesting</strong>...
+    </p>
+  </div>
+
+  <div id="footer"></div>
+  <script>
+  fetch('footer.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('footer').innerHTML = html;
+    });
+  </script>
+</body>
+</html>

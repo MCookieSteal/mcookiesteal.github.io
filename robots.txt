@@ -1,0 +1,30 @@
+# Robots.txt para CertificateOpinion
+# Permitir a todos los buscadores indexar todo el contenido
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://mcookiesteal.github.io/CertificateOpinion/sitemap.xml
+
+# Permitir específicamente los principales buscadores
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /

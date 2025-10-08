@@ -1,0 +1,20 @@
+title: "Opinión y Experiencia: Certificado eCPPTv3"
+description: "Blog personal sobre el certificado eCPPTv3 de INE, consejos, preparación y contenido del examen."
+theme: minima
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Puedes personalizar estos valores según tu preferencia.
+author: MCookieSteal
+lang: es
+
+# Opcional: para mostrar la fecha en formato español
+date_format: "%d-%m-%Y"
+
+# Si quieres usar un tema remoto de GitHub Pages, puedes poner:
+# remote_theme: minima
+
+# Si quieres desactivar los comentarios en los posts:
+show_comments: false
