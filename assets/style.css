@@ -244,23 +244,6 @@ code, pre {
   letter-spacing: -0.01em;
 }
 
-.toc {
-  background: var(--bg-alt);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  padding: 1.25rem 1.5rem;
-  margin: 2rem 0;
-}
-
-.toc-title {
-  margin: 0 0 0.6rem;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.toc ul { margin: 0; padding-left: 1.2rem; }
-.toc li { margin: 0.3rem 0; }
-
 .article h2 {
   font-size: 1.3rem;
   font-weight: 700;
@@ -303,7 +286,93 @@ footer {
 footer a { color: var(--text-muted); text-decoration: underline; }
 footer a:hover { color: var(--accent); }
 
+/* ---------- Índice lateral (siempre visible) ---------- */
+
+.page-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5rem;
+  padding: 0 1.5rem;
+}
+
+.page-shell .container {
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar-toc {
+  width: 230px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 1.5rem;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  padding: 2.2rem 0;
+}
+
+.sidebar-toc:empty { display: none; }
+
+.sidebar-toc-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.sidebar-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-toc a {
+  display: block;
+  padding: 0.35rem 0 0.35rem 0.85rem;
+  border-left: 2px solid var(--card-border);
+  color: var(--text-muted);
+  font-size: 0.87rem;
+  line-height: 1.4;
+}
+
+.sidebar-toc a:hover {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-toc a.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+.sidebar-toc ul ul {
+  margin-top: 0.1rem;
+}
+
+.sidebar-toc ul ul a {
+  padding-left: 1.6rem;
+  font-size: 0.82rem;
+}
+
 /* ---------- Responsive ---------- */
+
+@media (max-width: 980px) {
+  .sidebar-toc {
+    display: none;
+  }
+  .page-shell {
+    display: block;
+    padding: 0;
+  }
+}
 
 @media (max-width: 600px) {
   .container { padding: 0 1.1rem 2.5rem; }
