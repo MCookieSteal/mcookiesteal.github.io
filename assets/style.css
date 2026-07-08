@@ -1,0 +1,313 @@
+/* MCookieSteal - Certificados Ciberseguridad
+   Hoja de estilos compartida entre el sitio principal y las guías de certificados. */
+
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f6f7f9;
+  --card-bg: #ffffff;
+  --card-border: #e3e6ea;
+  --text: #1a1d24;
+  --text-muted: #5b6472;
+  --accent: #2954a6;
+  --accent-strong: #1a3670;
+  --accent-soft: #eaf0fb;
+  --code-bg: #f0f2f5;
+  --shadow: 0 1px 2px rgba(20, 24, 32, 0.04), 0 1px 12px rgba(20, 24, 32, 0.05);
+  --radius: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171c;
+    --bg-alt: #1a1e24;
+    --card-bg: #1b1f26;
+    --card-border: #2a2f38;
+    --text: #e8eaed;
+    --text-muted: #9aa3b0;
+    --accent: #8ab4f8;
+    --accent-strong: #cfe0fd;
+    --accent-soft: #202939;
+    --code-bg: #21262e;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 12px rgba(0, 0, 0, 0.25);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-strong); text-decoration: underline; }
+
+hr { display: none; }
+
+code, pre {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.92em;
+}
+
+/* ---------- Hero (página principal) ---------- */
+
+.hero {
+  padding: 3rem 0 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: 2.5rem;
+}
+
+.hero-name {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.01em;
+}
+
+.hero-role {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin: 0 0 1rem;
+}
+
+.hero-contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.hero-contact a { color: var(--text-muted); }
+.hero-contact a:hover { color: var(--accent); }
+
+/* ---------- Secciones ---------- */
+
+.section { margin-bottom: 3rem; }
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--accent-soft);
+}
+
+.section p { color: var(--text); }
+.lede { color: var(--text-muted); }
+
+/* ---------- Listas de habilidades / features ---------- */
+
+.feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.feature-list li {
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent-soft);
+}
+
+.feature-list strong { display: block; margin-bottom: 0.2rem; }
+
+/* ---------- Certificados obtenidos ---------- */
+
+.cert-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.cert-item {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.cert-item .cert-name { font-weight: 700; }
+.cert-item .cert-issuer {
+  display: inline-block;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0.15rem 0 0.5rem;
+}
+
+.cert-item p { margin: 0; color: var(--text); }
+
+.note {
+  margin-top: 1rem;
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+/* ---------- Tarjetas de guías / artículos relacionados ---------- */
+
+.card-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  display: block;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.4rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+.card-title {
+  display: block;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+
+.card:hover .card-title { color: var(--accent); }
+
+.card-desc {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.93rem;
+  line-height: 1.55;
+}
+
+.card-cta {
+  display: inline-block;
+  margin-top: 0.7rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.section-foot-note {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Página de artículo (guías de certificados) ---------- */
+
+.article-nav {
+  padding: 2rem 0 0;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.article-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 1.2rem 0 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.toc {
+  background: var(--bg-alt);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+}
+
+.toc-title {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.toc ul { margin: 0; padding-left: 1.2rem; }
+.toc li { margin: 0.3rem 0; }
+
+.article h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 2.2rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-soft);
+}
+
+.article ul, .article ol { padding-left: 1.3rem; }
+.article li { margin-bottom: 0.9rem; }
+.article li:last-child { margin-bottom: 0; }
+
+.article p { margin: 0 0 1rem; }
+
+.related {
+  background: var(--bg-alt);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 2.5rem 0 1rem;
+}
+
+.related-title { margin: 0 0 1rem; font-size: 1.05rem; font-weight: 700; }
+
+.related-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+.related-list a { font-weight: 600; }
+.related-list .soon { color: var(--text-muted); font-style: italic; font-weight: 400; }
+
+/* ---------- Footer ---------- */
+
+footer {
+  margin-top: 3rem;
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--card-border);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+footer a { color: var(--text-muted); text-decoration: underline; }
+footer a:hover { color: var(--accent); }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 600px) {
+  .container { padding: 0 1.1rem 2.5rem; }
+  .hero { padding: 2.2rem 0 1.5rem; }
+  .hero-name { font-size: 1.6rem; }
+  .article-title { font-size: 1.5rem; }
+}
