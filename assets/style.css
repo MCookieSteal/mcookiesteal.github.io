@@ -130,7 +130,7 @@ code, pre {
   border-left: 3px solid var(--accent-soft);
 }
 
-.feature-list strong { display: block; margin-bottom: 0.2rem; }
+.feature-list li > strong:first-child { display: block; margin-bottom: 0.3rem; }
 
 /* ---------- Certificados obtenidos ---------- */
 
