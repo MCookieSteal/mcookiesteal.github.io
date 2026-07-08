@@ -264,6 +264,26 @@ code, pre {
   text-align: center;
 }
 
+.diagram-wrap {
+  margin: 1.5rem 0 2rem;
+}
+
+.diagram-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+}
+
+.diagram-caption {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
 .article h2 {
   font-size: 1.3rem;
   font-weight: 700;
