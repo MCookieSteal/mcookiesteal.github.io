@@ -244,6 +244,26 @@ code, pre {
   letter-spacing: -0.01em;
 }
 
+.cert-image-wrap {
+  margin: 0 0 2rem;
+}
+
+.cert-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow);
+}
+
+.cert-caption {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
 .article h2 {
   font-size: 1.3rem;
   font-weight: 700;
