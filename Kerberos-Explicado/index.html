@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kerberos explicado a fondo: TGT, TGS, tickets y ataques (Kerberoasting, AS-REP Roasting, Timeroasting)</title>
+
+  <!-- Meta Description -->
+  <meta name="description" content="Guía a fondo del protocolo Kerberos en Active Directory: qué es, cómo funciona el intercambio AS-REQ/AS-REP/TGS-REQ/TGS-REP/AP-REQ/AP-REP, qué hay dentro de un ticket TGT/TGS, y los ataques más usados: Kerberoasting, AS-REP Roasting, AS-REQ Roasting y Timeroasting.">
+
+  <!-- Meta Keywords -->
+  <meta name="keywords" content="Kerberos, Active Directory, TGT, TGS, KDC, krbtgt, Kerberoasting, AS-REP Roasting, AS-REQ Roasting, Timeroasting, pentesting, Red Team, autenticación Windows, NTLM, protocolo Kerberos explicado">
+
+  <!-- Author -->
+  <meta name="author" content="MCookieSteal">
+
+  <!-- Robots -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mcookiesteal.github.io/Kerberos-Explicado/">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Kerberos explicado a fondo: TGT, TGS, tickets y ataques">
+  <meta property="og:description" content="Qué es Kerberos, cómo funciona el intercambio AS-REQ/AS-REP/TGS-REQ/TGS-REP/AP-REQ/AP-REP, qué hay dentro de un ticket, y los ataques más usados: Kerberoasting, AS-REP Roasting y Timeroasting.">
+  <meta property="og:url" content="https://mcookiesteal.github.io/Kerberos-Explicado/">
+  <meta property="og:site_name" content="MCookieSteal - Certificados Ciberseguridad">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:author" content="MCookieSteal">
+  <meta property="article:published_time" content="2026-07-08T00:00:00Z">
+  <meta property="article:modified_time" content="2026-07-08T00:00:00Z">
+  <meta property="article:section" content="Ciberseguridad">
+  <meta property="article:tag" content="Kerberos">
+  <meta property="article:tag" content="Active Directory">
+  <meta property="article:tag" content="Kerberoasting">
+  <meta property="article:tag" content="Red Team">
+  <meta property="article:tag" content="pentesting">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kerberos explicado a fondo: TGT, TGS, tickets y ataques">
+  <meta name="twitter:description" content="Qué es Kerberos, cómo funciona su intercambio de tickets, y los ataques más usados: Kerberoasting, AS-REP Roasting y Timeroasting.">
+  <meta name="twitter:creator" content="@MCookieSteal">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#2954a6">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14171c">
+
+  <!-- Language -->
+  <meta http-equiv="content-language" content="es">
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Kerberos explicado a fondo: TGT, TGS, tickets y ataques",
+    "description": "Guía a fondo del protocolo Kerberos en Active Directory: qué es, cómo funciona el intercambio de mensajes, qué hay dentro de un ticket TGT/TGS, y los ataques más usados (Kerberoasting, AS-REP Roasting, AS-REQ Roasting, Timeroasting).",
+    "author": {"@type": "Person", "name": "MCookieSteal", "jobTitle": "Especialista en Ciberseguridad"},
+    "datePublished": "2026-07-08",
+    "dateModified": "2026-07-08",
+    "publisher": {"@type": "Person", "name": "MCookieSteal"},
+    "inLanguage": "es",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://mcookiesteal.github.io/Kerberos-Explicado/"},
+    "about": [
+      {"@type": "Thing", "name": "Kerberos"},
+      {"@type": "Thing", "name": "Active Directory"},
+      {"@type": "Thing", "name": "Kerberoasting"},
+      {"@type": "Thing", "name": "Red Team"},
+      {"@type": "Thing", "name": "Ciberseguridad"}
+    ],
+    "keywords": "Kerberos, Active Directory, TGT, TGS, KDC, krbtgt, Kerberoasting, AS-REP Roasting, Timeroasting",
+    "articleSection": "Investigación y Conocimiento",
+    "educationalLevel": "Intermedio-Avanzado",
+    "teaches": "Funcionamiento del protocolo Kerberos, estructura de tickets TGT/TGS, ataques Kerberoasting, AS-REP Roasting, AS-REQ Roasting y Timeroasting",
+    "dependencies": "Conocimientos básicos de Active Directory y redes"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "¿Qué es Kerberos?", "acceptedAnswer": {"@type": "Answer", "text": "Kerberos es un protocolo de autenticación de red seguro, basado en clave simétrica, que permite verificar identidades de usuarios y servicios sin enviar contraseñas por la red. Es la base de la autenticación en Windows Active Directory."}},
+      {"@type": "Question", "name": "¿Qué diferencia hay entre un TGT y un TGS?", "acceptedAnswer": {"@type": "Answer", "text": "El TGT (Ticket Granting Ticket) es el ticket maestro que se obtiene tras autenticarse ante el KDC y permite pedir acceso a servicios sin reintroducir credenciales. El TGS (Ticket Granting Service) es el ticket específico para un servicio concreto, obtenido presentando el TGT, y va cifrado con la clave de ese servicio."}},
+      {"@type": "Question", "name": "¿Qué es el Kerberoasting?", "acceptedAnswer": {"@type": "Answer", "text": "Kerberoasting es un ataque en el que cualquier usuario autenticado del dominio solicita un TGS para una cuenta de servicio con SPN. Como el KDC no verifica permisos, el TGS se entrega igualmente y va cifrado con el hash de la cuenta de servicio, que se puede intentar crackear offline."}},
+      {"@type": "Question", "name": "¿Qué es el AS-REP Roasting?", "acceptedAnswer": {"@type": "Answer", "text": "El AS-REP Roasting ataca a usuarios que tienen la pre-autenticación de Kerberos deshabilitada. Al no requerir prueba previa de la contraseña, el KDC entrega directamente un TGT con una parte crackeable offline, sin que el atacante necesite conocer la contraseña de antemano."}},
+      {"@type": "Question", "name": "¿Qué es el Timeroasting?", "acceptedAnswer": {"@type": "Answer", "text": "El Timeroasting abusa del servicio de hora de Windows (NTP): cualquier usuario puede pedir la hora a una máquina del dominio y, si el servicio está activo, obtener una respuesta firmada con el hash de esa cuenta de máquina, que también puede intentarse crackear offline."}}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://mcookiesteal.github.io/"},
+      {"@type": "ListItem", "position": 2, "name": "Artículos e Investigación", "item": "https://mcookiesteal.github.io/"},
+      {"@type": "ListItem", "position": 3, "name": "Kerberos Explicado a Fondo", "item": "https://mcookiesteal.github.io/Kerberos-Explicado/"}
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <div class="page-shell">
+  <aside class="sidebar-toc" id="sidebar-toc"></aside>
+  <div class="container">
+    <nav class="article-nav">
+      <a class="back-link" href="../">← Volver al inicio</a>
+    </nav>
+
+    <h1 class="article-title">Kerberos: más viejo que Internet, más vigente que nunca</h1>
+
+    <div class="article">
+      <p>
+        Llevaba tiempo queriendo hacer esto: ir publicando también investigaciones y contenido técnico propio, no solo
+        reviews de certificaciones. Empiezo por <strong>Kerberos</strong>, el protocolo de autenticación que sostiene medio
+        Active Directory del planeta, porque es de esos temas que todo el mundo usa a diario en pentesting y pocas veces se
+        para a entender del todo.
+      </p>
+      <p>
+        Voy a intentar explicarlo tal y como lo cuento en persona, de lo más superficial a lo más profundo: qué es Kerberos,
+        cómo funciona paso a paso, qué hay literalmente dentro de un ticket, y por último los ataques más conocidos y por qué
+        funcionan. Si venís del mundo del pentesting seguro que ya os suenan Kerberoasting o AS-REP Roasting, pero vamos a
+        entender primero el "por qué" antes que el "cómo", que es donde de verdad se entiende esto.
+      </p>
+
+      <h2 id="que-es-kerberos">¿Qué es Kerberos?</h2>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/intro-que-es-kerberos.jpg" alt="Diapositiva original: ¿Qué es Kerberos? Diagrama de Active Directory, tercero de confianza y tickets" loading="lazy">
+        <p class="diagram-caption">Active Directory como tercero de confianza en el modelo cliente-servidor</p>
+      </div>
+
+      <p>
+        Kerberos es un <strong>protocolo de autenticación de red seguro</strong> que se utiliza en redes inseguras para
+        verificar las identidades de usuarios y servicios <strong>sin enviar contraseñas por la red</strong>. Es la base de
+        la autenticación en Windows Active Directory, y permite el inicio de sesión en entornos distribuidos. Trabaja en la
+        capa de transporte (capa 4 del modelo OSI).
+      </p>
+      <p>
+        Usa un modelo <strong>cliente-servidor</strong>, lo que en la práctica significa que se necesita de
+        <strong>un tercero para verificar las identidades</strong> (ni el cliente ni el servicio confían directamente el uno
+        en el otro, confían en ese tercero). Se basa en el protocolo de clave simétrica de Needham-Schroeder, y en vez de ir
+        pasando contraseñas de un lado a otro, se utilizan <strong>tickets para autenticarse</strong>.
+      </p>
+      <p>
+        Rápido inciso porque siempre sale la duda: la clave simétrica es un método criptográfico que usa <strong>una única
+        clave secreta</strong>, compartida previamente entre emisor y receptor, para cifrar y descifrar. La asimétrica, en
+        cambio, usa un par de claves, una privada y una pública. Kerberos es simétrico de principio a fin.
+      </p>
+
+      <h2 id="que-se-necesita">¿Qué se necesita para autenticarse?</h2>
+      <p>Hay tres componentes fundamentales en toda autenticación mediante Kerberos:</p>
+      <ul>
+        <li><strong>Usuario:</strong> la persona (o cuenta) que se quiere autenticar.</li>
+        <li><strong>KDC (Key Distribution Center):</strong> el que verifica si el usuario realmente es quien dice ser. Suele
+        estar en el DC (Domain Controller), escuchando en el puerto 88. Tiene dos partes diferenciadas: el <strong>AS
+        (Authentication Server)</strong> y el <strong>TGS (Ticket Granting Server)</strong>.</li>
+        <li><strong>AP (Application Server):</strong> el servicio o servidor en el que el usuario quiere entrar o
+        autenticarse.</li>
+      </ul>
+
+      <h2 id="kerberos-vs-ntlm">Un inciso: Kerberos vs NTLM</h2>
+      <p>
+        Antes de meternos en tickets, merece la pena diferenciarlo de <strong>NTLM (NT LAN Manager)</strong>, el otro gran
+        protocolo de autenticación de Microsoft, porque los vais a ver conviviendo en cualquier entorno Windows.
+      </p>
+      <p>
+        NTLM funciona con un proceso de <strong>desafío-respuesta (challenge-response)</strong>: el servidor envía un
+        "desafío" (un número aleatorio) al cliente, este lo <strong>cifra con el hash de su contraseña</strong> y lo
+        devuelve, y el servidor comprueba si la respuesta es correcta. Emplea hashes criptográficos en lugar de contraseñas
+        en texto plano, y el hash NTLM (basado en el algoritmo MD4) es el que se usa para guardar las contraseñas en Windows.
+        Hay dos versiones: <strong>NTLMv1</strong> (usa DES y MD4) y <strong>NTLMv2</strong> (usa HMAC-MD5, aunque tampoco usa
+        AES).
+      </p>
+      <p>
+        La diferencia de fondo con Kerberos es esa: NTLM sigue moviendo material derivado de la contraseña en cada
+        autenticación, mientras que Kerberos se apoya en un tercero (el KDC) y en tickets con tiempo de vida limitado.
+      </p>
+
+      <h2 id="tipos-de-tickets">Tipos de tickets: TGT y TGS</h2>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/tipos-de-tickets.jpg" alt="Diapositiva original: comparación entre el Ticket Granting Ticket (TGT) y el Ticket Granting Service (TGS)" loading="lazy">
+        <p class="diagram-caption">TGT vs TGS: qué es cada uno y para qué sirve</p>
+      </div>
+
+      <p>
+        El <strong>TGT (Ticket Granting Ticket)</strong> es, esencialmente, la "llave maestra" que un usuario autenticado
+        recibe del KDC tras una autenticación inicial exitosa. El TGT permite al usuario solicitar accesos a diferentes
+        servicios de la red <strong>sin necesidad de volver a introducir sus credenciales</strong>. Se cifra con la clave del
+        KDC (la cuenta <strong>krbtgt</strong>), de forma que solo el KDC puede descifrarlo y validar su autenticidad. Una vez
+        que tienes un TGT, ya estás autenticado y puedes pedir tickets TGS.
+      </p>
+      <p>
+        El <strong>TGS (Ticket Granting Service)</strong> actúa como un permiso de acceso a un recurso o servicio concreto.
+        Se cifra con la clave del servicio al que el usuario quiere acceder, es decir, que <strong>solo el servidor de
+        aplicación puede descifrar el TGS</strong> y validar el acceso. Para obtener un TGS, primero necesitas haber obtenido
+        (y que te validen) un TGT.
+      </p>
+      <p>Los tickets, además, se cifran con distintos algoritmos (<code>etype</code>), y esto importa mucho de cara a los ataques:</p>
+      <ul>
+        <li><strong>etype 23 (RC4):</strong> cifrado débil, explotable con fuerza bruta usando hashes NT. Crackea muy rápido.</li>
+        <li><strong>etype 18 (AES256):</strong> cifrado fuerte, mucho más difícil de explotar. Crackea muy muy lento.</li>
+        <li><strong>etype 17 (AES128):</strong> cifrado fuerte, también mucho más difícil de explotar. Crackea muy lento.</li>
+      </ul>
+
+      <h2 id="tipos-de-claves">Tipos de claves que te vas a encontrar</h2>
+      <p>Este es el punto que más cuesta al principio, así que vamos por partes:</p>
+      <ul>
+        <li><strong>Hash de usuario:</strong> nace del NTLM del usuario, o de AES128/AES256.</li>
+        <li><strong>Hash del KDC (krbtgt):</strong> nace del NTLM (o AES) del usuario KRBTGT. Se usa para firmar los TGT válidos.</li>
+        <li><strong>Hash de servicio:</strong> pertenece a la cuenta (de usuario o de máquina) que da servicio a la aplicación a la que se accede.</li>
+        <li><strong>Clave de sesión:</strong> una clave temporal usada en la petición del ticket, que asegura que la comunicación con el KDC sea segura y que solo el usuario legítimo y el KDC puedan interpretarla.</li>
+        <li><strong>Clave de sesión de servicio:</strong> lo mismo, pero para la comunicación entre el cliente y el servidor de aplicación.</li>
+      </ul>
+      <p>
+        <strong>¡Ojo con esto!</strong> Los hashes <strong>no se envían nunca</strong> por la red, las claves sí. Y una clave,
+        en el fondo, es el resultado de cifrar un texto con un hash: el TGT va cifrado con el hash del usuario y, dentro,
+        lleva el hash del usuario + el hash de KRBTGT + la clave de sesión; el TGS, por su parte, va cifrado con el hash de
+        servicio + la clave de sesión de servicio. Entender esta cadena es la clave (nunca mejor dicho) para entender por qué
+        funcionan los ataques que vienen más adelante.
+      </p>
+
+      <h2 id="cifrados-etype">Los cifrados (etype) de un vistazo</h2>
+      <p>Para resumir el apartado de cifrado antes de pasar al funcionamiento:</p>
+      <ul>
+        <li><strong>ETYPE 17:</strong> nace del AES128 del usuario.</li>
+        <li><strong>ETYPE 18:</strong> nace del AES256 del usuario.</li>
+        <li><strong>ETYPE 23:</strong> nace del NT del usuario.</li>
+      </ul>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/cifrados-etype.jpg" alt="Diapositiva original: pirámide de fortaleza de los cifrados etype 17, 18 y 23, y tabla comparativa de velocidad de crackeo" loading="lazy">
+        <p class="diagram-caption">De más débil a más fuerte: RC4/NT, AES128, AES256</p>
+      </div>
+
+      <h2 id="proceso-completo">El proceso completo, paso a paso</h2>
+      <p>
+        Con los conceptos claros, vamos al funcionamiento real. Todo el proceso de autenticación de Kerberos se resume en
+        seis mensajes, agrupados en tres fases (petición de TGT, petición de TGS, y acceso al servicio):
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/flujo-completo.jpg" alt="Diapositiva original: diagrama del flujo completo de Kerberos con los seis mensajes KRB_AS_REQ, KRB_AS_REP, KRB_TGS_REQ, KRB_TGS_REP, KRB_AP_REQ y KRB_AP_REP entre usuario, KDC y servicio" loading="lazy">
+        <p class="diagram-caption">Los seis mensajes del protocolo Kerberos, de principio a fin</p>
+      </div>
+
+      <ol>
+        <li><strong>KRB_AS_REQ:</strong> el usuario pide un TGT al KDC.</li>
+        <li><strong>KRB_AS_REP:</strong> el KDC comprueba las credenciales del usuario y, si son correctas, le entrega el TGT.</li>
+        <li><strong>KRB_TGS_REQ:</strong> el usuario, que ya tiene el TGT (y por tanto ya está validado por el KDC), lo presenta para pedir un TGS.</li>
+        <li><strong>KRB_TGS_REP:</strong> el KDC, que ya confía en ese usuario porque le entregó el TGT, le entrega el TGS.</li>
+        <li><strong>KRB_AP_REQ:</strong> el usuario, con el TGS en mano, intenta acceder al servicio.</li>
+        <li><strong>KRB_AP_REP:</strong> el servicio comprueba que el usuario tiene permiso y le deja entrar.</li>
+      </ol>
+
+      <h2 id="goad">Laboratorio de pruebas: GOAD</h2>
+      <p>
+        Todo lo que viene a continuación lo he probado en
+        <a href="https://orange-cyberdefense.github.io/GOAD/labs/GOAD/" target="_blank" rel="noopener">GOAD (Game Of Active Directory)</a>,
+        un laboratorio de Active Directory pensado precisamente para practicar este tipo de ataques en un entorno realista y
+        controlado. Si queréis reproducir cualquiera de estos pasos, es el sitio por donde yo empezaría.
+      </p>
+
+      <h2 id="peticion-tgt-detalle">Petición de un TGT en detalle (AS-REQ / AS-REP)</h2>
+      <p>
+        En el <strong>KRB_AS_REQ</strong>, el usuario envía al KDC una petición que incluye el principal del cliente, el
+        principal del servicio (el propio KDC), un timestamp, un lifetime, y unos <strong>padata</strong> (pre-authentication
+        data) cifrados con el <strong>hash del usuario</strong>. Esa pre-autenticación es, precisamente, la que se salta en
+        el ataque de AS-REP Roasting que veremos más adelante.
+      </p>
+      <p>
+        En el <strong>KRB_AS_REP</strong>, si todo cuadra, el KDC genera el TGT: lo devuelve junto con una clave de sesión, y
+        dentro del TGT viaja la información del ticket (PAC, claves internas, grupos del usuario...). Este TGT va cifrado con
+        el <strong>hash de KRBTGT</strong>, mientras que el resto de la respuesta (la clave de sesión) va cifrada con el
+        <strong>hash del usuario</strong>. Por eso solo el usuario legítimo puede leer la clave de sesión, y solo el KDC
+        puede, más adelante, volver a abrir el TGT.
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/detalle-as-rep.jpg" alt="Diapositiva original: captura de Wireshark y esquema de KRB_AS_REP mostrando el TGT generado, cifrado con el hash de KRBTGT y el hash del usuario" loading="lazy">
+        <p class="diagram-caption">KRB_AS_REP capturado en Wireshark sobre el laboratorio GOAD</p>
+      </div>
+
+      <h2 id="peticion-tgs-detalle">Petición de un TGS en detalle (TGS-REQ / TGS-REP)</h2>
+      <p>
+        En el <strong>KRB_TGS_REQ</strong>, el usuario presenta el TGT (cifrado con el hash de KRBTGT, recordad) junto con la
+        clave de sesión, el principal del servicio al que quiere acceder, y la información del ticket. En el
+        <strong>KRB_TGS_REP</strong>, el KDC valida ese TGT y entrega el TGS, cifrado esta vez con el
+        <strong>hash del servicio o máquina</strong> de destino, y una clave de sesión de servicio cifrada con el hash del
+        usuario. Este cambio de "quién puede descifrar qué" es exactamente lo que hace posible el Kerberoasting.
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/detalle-tgs-rep.jpg" alt="Diapositiva original: captura de Wireshark y esquema de KRB_TGS_REP mostrando el TGS cifrado con el hash del servicio" loading="lazy">
+        <p class="diagram-caption">KRB_TGS_REP: el TGS ya cifrado con el hash del servicio de destino</p>
+      </div>
+
+      <h2 id="acceso-servicio">Acceso al servicio (AP-REQ / AP-REP)</h2>
+      <p>
+        Por último, en el <strong>KRB_AP_REQ</strong> el usuario envía el TGS directamente al servicio (ya no al KDC). El
+        servicio, que es el único capaz de descifrar ese TGS porque va cifrado con su propio hash, valida los permisos y en
+        el <strong>KRB_AP_REP</strong> responde confirmando el acceso (o denegándolo). A partir de aquí, la sesión con el
+        servicio queda establecida.
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/detalle-ap-rep.jpg" alt="Diapositiva original: captura de Wireshark y esquema de KRB_AP_REP confirmando el acceso al servicio" loading="lazy">
+        <p class="diagram-caption">KRB_AP_REP: el servicio responde confirmando el acceso</p>
+      </div>
+
+      <h2 id="destripando-tgt">Destripando tickets: cómo abrir un TGT</h2>
+      <p>
+        Todo esto está muy bien en la teoría, pero cuando lo ves en Wireshark, todo va cifrado y no se entiende nada a
+        simple vista. Para poder inspeccionar un ticket de verdad hace falta la clave con la que está cifrado; yo
+        uso <a href="https://github.com/dirkjanm/forest-trust-tools/blob/master/keytab.py" target="_blank" rel="noopener">keytab.py de dirkjanm</a>
+        para generar un keytab a partir de un hash conocido, y luego configurar Wireshark
+        (<strong>Edición &gt; Preferencias</strong>, en el apartado de protocolo Kerberos) para que use ese keytab y descifre
+        el tráfico automáticamente.
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/destripando-wireshark.jpg" alt="Diapositiva original: configuración de Wireshark con keytab.py para descifrar tráfico Kerberos" loading="lazy">
+        <p class="diagram-caption">keytab.py + Wireshark (Edición &gt; Preferencias) para descifrar el tráfico Kerberos</p>
+      </div>
+
+      <p>
+        Si no le das la clave correcta a Wireshark (o al software que uses), simplemente vas a ver el bloque cifrado y un
+        error de descifrado, porque, obviamente, sin la clave no hay forma de pasar de <strong>cifrado</strong> a
+        <strong>descifrado</strong>.
+      </p>
+      <p>
+        Y aquí va el aviso más importante de todo el artículo: <strong>lo crítico no es la información que va dentro de un
+        ticket</strong>, porque ahí dentro no viaja nada realmente sensible por sí solo (grupos, nombres de principal, PAC...).
+        Lo crítico de verdad es que, <strong>si tienes el hash de la cuenta KRBTGT, tienes el poder de crear tickets válidos
+        desde cero</strong> (además de poder abrir los que ya existen). Esa cuenta es, literalmente, la que firma la
+        confianza de todo el dominio.
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/destripando-tgt.jpg" alt="Diapositiva original: destripando un ticket TGT, con el aviso de que el poder real está en la cuenta KRBTGT" loading="lazy">
+        <p class="diagram-caption">Destripando un TGT real capturado en el laboratorio</p>
+      </div>
+
+      <h2 id="destripando-tgs">¿Y el ticket TGS? ¿Qué diferencia tiene?</h2>
+      <p>
+        La lógica es la misma que con el TGT: sin la clave adecuada no puedes ver el contenido. La diferencia real está en
+        <strong>quién puede abrirlo</strong>. El TGT lo cifra y lo puede volver a abrir el KDC (con el hash de KRBTGT); el TGS
+        lo cifra el KDC pero lo abre el servicio de destino, porque va firmado con el hash de esa cuenta de servicio o
+        máquina. Esa diferencia de "quién tiene la llave" es la que aprovechan casi todos los ataques que vienen ahora.
+      </p>
+
+      <h2 id="ataques-cifrados">Antes de atacar: fijaos siempre en el cifrado</h2>
+      <p>
+        Un consejo que repito siempre: antes de lanzaros a por cualquiera de estos ataques, mirad con qué <code>etype</code>
+        va cifrado lo que estáis intentando crackear. No es lo mismo un hash en <strong>etype 23 (RC4)</strong>, que cae
+        rápido con fuerza bruta, que uno en <strong>etype 17/18 (AES128/256)</strong>, que puede ser papel mojado para
+        vuestro diccionario si no tenéis tiempo (o hardware) de sobra. Saber esto de antemano os ahorra muchas horas de
+        Hashcat en balde.
+      </p>
+
+      <h2 id="as-req-roasting">AS-REQ Roasting</h2>
+      <p>
+        Este ataque parte de una pregunta simple: <strong>¿con qué hash está cifrada esta petición de TGT?</strong> Para
+        poder capturarlo necesitáis <strong>control de la red o un relay</strong>, de forma que el tráfico de la petición
+        (KRB_AS_REQ) pase por vosotros. El formato del hash resultante, listo para crackear, sigue este patrón:
+      </p>
+      <p><code>$krb&lt;versión&gt;&lt;fase&gt;$&lt;etype&gt;$&lt;usuario&gt;$&lt;dominio&gt;$&lt;cipher&gt;</code></p>
+      <p>
+        Nota rápida porque genera confusión: <strong>Pre-Auth</strong> y <strong>AS_REQ</strong> se podría decir que son
+        sinónimos en este contexto, porque ambos se refieren a la misma fase del protocolo.
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/as-req-roasting.jpg" alt="Diapositiva original: AS-REQ Roasting, formato del hash capturado y terminal con la captura del ataque" loading="lazy">
+        <p class="diagram-caption">AS-REQ Roasting capturado y formateado para Hashcat/John</p>
+      </div>
+
+      <h2 id="asrep-roasting">AS-REP Roasting (cuentas sin pre-autenticación)</h2>
+      <p>
+        Este es de los más cómodos de explotar cuando se dan las condiciones, porque <strong>no necesitas conocer ni una
+        sola credencial de antemano</strong>. Si un usuario tiene la <strong>pre-autenticación deshabilitada</strong>, el
+        KDC no comprueba que quien pide el TGT conoce realmente la contraseña, y genera el TGT igualmente.
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/as-rep-roasting-ataque.jpg" alt="Diapositiva original: AS-REP Roasting, terminal con la captura del hash de un usuario sin pre-autenticación" loading="lazy">
+        <p class="diagram-caption">AS-REP Roasting: el KDC entrega el TGT sin verificar la contraseña</p>
+      </div>
+
+      <p>
+        La respuesta (AS_REP) incluye una parte cifrada que se puede intentar crackear offline, con un formato muy parecido
+        al del AS-REQ Roasting, añadiendo un fragmento de las últimas 24 horas de cifrado:
+      </p>
+      <p><code>$krb&lt;versión&gt;&lt;fase&gt;$&lt;etype&gt;$&lt;usuario&gt;$&lt;dominio&gt;$&lt;ultimos24&gt;$&lt;cipher&gt;</code></p>
+
+      <h2 id="kerberoasting">Kerberoasting (TGS-REP Roasting)</h2>
+      <p>
+        Puede que sea el ataque más conocido de todo Active Directory, y la razón por la que funciona está justo en lo que
+        explicamos antes sobre el TGS. Primero hay que entender qué es una <strong>cuenta de servicio</strong>: una cuenta de
+        usuario (o de máquina) que se usa para ejecutar un servicio del sistema, identificada por un atributo
+        <strong>SPN (Service Principal Name)</strong> que viene a decir "esta cuenta de AD representa el servicio X que
+        corre en el servidor Y" (por ejemplo, la cuenta <code>sqlservice</code> para un SQL Server).
+      </p>
+      <p>
+        El problema es que <strong>el KDC no verifica que el usuario tenga o no acceso real a ese servicio</strong>: todo
+        usuario autenticado del dominio puede pedir el TGS de cualquier cuenta con SPN, y el KDC lo entrega igualmente. Y como
+        ya sabemos, ese TGS va firmado con el <strong>hash de la cuenta de servicio</strong>.
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/kerberoasting-ataque.jpg" alt="Diapositiva original: Kerberoasting, terminal con la captura de hashes TGS-REP de cuentas de servicio" loading="lazy">
+        <p class="diagram-caption">Kerberoasting: cualquier usuario autenticado puede pedir el TGS de una cuenta de servicio</p>
+      </div>
+
+      <p>
+        A partir de ahí, el juego es simple: pides el TGS de todas las cuentas de servicio que encuentres, te llevas ese
+        material cifrado con su hash, y lo intentas crackear offline con calma, sin tocar de nuevo el dominio ni arriesgarte
+        a bloqueos de cuenta.
+      </p>
+
+      <h2 id="timeroasting">Timeroasting: cuando hasta el NTP te compromete</h2>
+      <p>
+        Este es el que más sorprende la primera vez que lo ves, porque abusa de algo que parece completamente inofensivo:
+        el <strong>servicio de hora de Windows (NTP)</strong>, cuya única función es sincronizar los relojes de las máquinas
+        de la red. El intercambio NTP es sencillo: un cliente envía una petición a un servidor NTP, y el servidor responde
+        con un paquete que incluye marcas de tiempo (cuatro timestamps, en una estructura de 48 bytes para NTPv3/v4):
+        <strong>Originate (T1)</strong>, hora en la que el cliente envía la petición; <strong>Receive (T2)</strong>, hora en
+        la que el servidor la recibe; <strong>Transmit (T3)</strong>, hora en la que el servidor responde; y
+        <strong>Destination (T4)</strong>, hora en la que el cliente recibe la respuesta.
+      </p>
+
+      <div class="diagram-wrap">
+        <img class="diagram-img" src="imagenes/timeroasting-ntp.jpg" alt="Diapositiva original: intercambio NTP con los timestamps Originate, Receive, Transmit y Destination" loading="lazy">
+        <p class="diagram-caption">El intercambio NTP (T1-T4) que hace posible el Timeroasting</p>
+      </div>
+
+      <p>
+        La parte interesante (y el ataque en sí) es que <strong>cualquier persona puede pedir la hora a una máquina
+        cualquiera del dominio</strong> y, si tiene el servicio activo, obtener una respuesta firmada con el
+        <strong>hash de esa cuenta de máquina</strong>, sin necesidad de estar autenticado. Todo esto funciona porque,
+        históricamente, se asumía que "si puedes pedir la hora, eres de confianza".
+      </p>
+      <p>
+        ¿Y qué tiene que ver el NTP con Kerberos? Pues que Kerberos necesita que los relojes de cliente, KDC y servicio estén
+        sincronizados para saber cuándo expiran los tickets, y usa esos mismos timestamps para saber cuándo se genera y
+        expira cada ticket, precisamente para <strong>evitar ataques de reutilización de tickets</strong>. El propio
+        mecanismo que protege a Kerberos de un tipo de ataque es el que, mal configurado, abre la puerta a otro distinto.
+      </p>
+
+      <h2 id="para-cerrar">Para cerrar</h2>
+      <p>
+        Si os habéis leído todo esto de un tirón, enhorabuena, es un tocho considerable. Kerberos es un protocolo de los
+        años 80, más viejo que buena parte de las tecnologías que corren hoy en cualquier red corporativa, y sigue siendo,
+        casi 40 años después, el corazón de la autenticación en Active Directory. Y ahí sigue, aguantando ataques nuevos con
+        la misma arquitectura de siempre.
+      </p>
+      <p>
+        Si esto os ha servido para entender mejor por qué funcionan ataques como el Kerberoasting o el AS-REP Roasting más
+        allá de "lanza esta herramienta y ya", el objetivo está cumplido. Si os interesa seguir tirando del hilo de Active
+        Directory y Red Team, en la web tenéis también mis opiniones sobre el <a href="../CRTP-Review/">CRTP</a>
+        y el <a href="../CRTA-Review/">CRTA</a>, que van bastante de la mano de todo esto.
+      </p>
+    </div>
+
+    <div class="related">
+      <p class="related-title">Más contenido en la web</p>
+      <ul class="related-list">
+        <li><a href="../">← Ver todo el contenido</a></li>
+        <li><a href="../CRTP-Review/">Guía Completa CRTP (Active Directory)</a></li>
+        <li><a href="../CRTA-Review/">Guía Completa CRTA</a></li>
+        <li><a href="../eCPPTv3-Review/">Guía Completa eCPPTv3</a></li>
+      </ul>
+    </div>
+  </div>
+  </div>
+
+  <div id="footer"></div>
+  <script>
+  fetch('footer.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('footer').innerHTML = html;
+    });
+  </script>
+  <script src="../assets/toc.js"></script>
+</body>
+</html>
